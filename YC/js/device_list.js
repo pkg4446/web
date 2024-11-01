@@ -148,6 +148,7 @@ function getdata(send_data, device){
     const hive_num = 5;
     send_data.dvid = device[0];
     fetch("http://yc.beetopia.kro.kr"+"/hive/config", {
+        mode: 'no-cors',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -284,6 +285,7 @@ function fetch_equipment() {
         token:  localStorage.getItem('token')
     }
     fetch("http://yc.beetopia.kro.kr"+"/hive/list", {
+        mode: 'no-cors',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -329,6 +331,7 @@ function fetch_user_info() {
         token:  localStorage.getItem('token'),
     }
     fetch("http://yc.beetopia.kro.kr"+"/user/info", {
+        mode: 'no-cors',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -369,6 +372,7 @@ function fetch_equipment_disconnect(device_id) {
                     dvid:   device_id
                 }
                 fetch("http://yc.beetopia.kro.kr"+"/hive/disconnect", {
+                    mode: 'no-cors',
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -403,6 +407,7 @@ function fetch_device_rename(device_id,device_name) {
             name:   device_name
         }
         fetch("http://yc.beetopia.kro.kr"+"/hive/devicerename", {
+            mode: 'no-cors',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -436,6 +441,7 @@ function fetch_equipment_heater(device_id,func,value) {
         value:  value
     }
     fetch("http://yc.beetopia.kro.kr"+"/hive/heater", {
+        mode: 'no-cors',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

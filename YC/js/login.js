@@ -10,6 +10,7 @@ document.getElementById('userForm').addEventListener('submit', function(event) {
 
     // fetch(window.location.protocol+"//"+"yc.beetopia.kro.kr"+"/user/login", {
     fetch("http://yc.beetopia.kro.kr"+"/user/login", {
+        mode: 'no-cors',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
