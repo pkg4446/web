@@ -147,7 +147,7 @@ function temp_assist_change(temp_devid,devid) {
 function getdata(send_data, device){
     const hive_num = 5;
     send_data.dvid = device[0];
-    fetch(window.location.protocol+"//"+"yc.beetopia.kro.kr"+"/hive/config", {
+    fetch("http://yc.beetopia.kro.kr"+"/hive/config", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -283,7 +283,7 @@ function fetch_equipment() {
         id:     localStorage.getItem('user'),
         token:  localStorage.getItem('token')
     }
-    fetch(window.location.protocol+"//"+"yc.beetopia.kro.kr"+"/hive/list", {
+    fetch("http://yc.beetopia.kro.kr"+"/hive/list", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -328,7 +328,7 @@ function fetch_user_info() {
         id:     localStorage.getItem('user'),
         token:  localStorage.getItem('token'),
     }
-    fetch(window.location.protocol+"//"+"yc.beetopia.kro.kr"+"/user/info", {
+    fetch("http://yc.beetopia.kro.kr"+"/user/info", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -368,7 +368,7 @@ function fetch_equipment_disconnect(device_id) {
                     token:  localStorage.getItem('token'),
                     dvid:   device_id
                 }
-                fetch(window.location.protocol+"//"+"yc.beetopia.kro.kr"+"/hive/disconnect", {
+                fetch("http://yc.beetopia.kro.kr"+"/hive/disconnect", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -402,7 +402,7 @@ function fetch_device_rename(device_id,device_name) {
             dvid:   device_id,
             name:   device_name
         }
-        fetch(window.location.protocol+"//"+"yc.beetopia.kro.kr"+"/hive/devicerename", {
+        fetch("http://yc.beetopia.kro.kr"+"/hive/devicerename", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -435,7 +435,7 @@ function fetch_equipment_heater(device_id,func,value) {
         func:   func,
         value:  value
     }
-    fetch(window.location.protocol+"//"+"yc.beetopia.kro.kr"+"/hive/heater", {
+    fetch("http://yc.beetopia.kro.kr"+"/hive/heater", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

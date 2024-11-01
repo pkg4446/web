@@ -3,7 +3,7 @@ if(localStorage.getItem('user')==null || localStorage.getItem('token')==null){
 }
 document.getElementById('userForm').addEventListener('submit', function(event) {
     event.preventDefault();
-    fetch(window.location.protocol+"//"+"yc.beetopia.kro.kr"+"/user/join", {
+    fetch("http://yc.beetopia.kro.kr"+"/user/join", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -8,7 +8,8 @@ document.getElementById('userForm').addEventListener('submit', function(event) {
     const userid   = document.getElementById('userid').value;
     const password = document.getElementById('password').value;
 
-    fetch(window.location.protocol+"//"+"yc.beetopia.kro.kr"+"/user/login", {
+    // fetch(window.location.protocol+"//"+"yc.beetopia.kro.kr"+"/user/login", {
+    fetch("http://yc.beetopia.kro.kr"+"/user/login", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
