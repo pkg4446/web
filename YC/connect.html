@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="./manifest.json">
+<title>Smartfarm</title>
+<link href="./css/main.css" rel="stylesheet" type="text/css" />
+<link href="./css/user.css" rel="stylesheet" type="text/css" /></head>
+<body>
+<header>
+    <h4>&nbsp;</h4>
+    <h1>스마트 양봉</h1>
+</header>
+<nav class="navbar">
+    <!-- 체크박스 -->
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <!-- 햄버거 메뉴 아이콘 -->
+    <label for="menu-toggle" class="menu-toggle-label">&#9776; 메뉴 </label>
+    <!-- 메뉴 항목 -->
+    <ul class="menu-links">
+        <li><a href="/web/YC/">현황판</a></li>
+        <li><a href="/web/YC/connect.html">장비등록</a></li>
+        <li><a id="login" href="/web/YC/login.html">로그아웃</a></li>
+    </ul>
+</nav><style>
+.data-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 5px;
+}
+.cell {
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    text-align: center;
+    background-color: white;
+    transition: transform 0.2s ease;
+}
+</style>
+<main>
+    <div class="submit-container">
+        <h2>장비등록</h2>
+        <form id="userForm">
+
+            <div class="data-row">
+                <label class="cell" for="device">벌통</label>
+                <input class="cell" type="radio" name="device_type" value="hive" checked >
+                <label class="cell" for="device">펌프</label>
+                <input class="cell" type="radio" name="device_type" value="pump">
+            </div>
+            
+            <div class="input-group">
+                <label for="device">장비 아이디</label>
+                <input type="text" class="input-field" id="device" required>
+            </div>
+            <div class="input-group">
+                <label for="device">장비 이름</label>
+                <input type="text" class="input-field" id="device_name" required>
+            </div>
+            <button type="submit" class="submit-button">등록</button>
+        </form>
+        <div id="same_ip"></div>
+    </div>
+</main><br><br>
+<footer>
+    <p>스마트팜 © 2024</p>
+</footer>
+<script src="./js/sweetalert2.js"></script>
+<script src="./js/device_reg.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="./manifest.json">
+<title>Smartfarm</title>
+<link href="./css/main.css" rel="stylesheet" type="text/css" />
+<link href="./css/user.css" rel="stylesheet" type="text/css" /></head>
+<body>
+<header>
+    <h4>&nbsp;</h4>
+    <h1>스마트 양봉</h1>
+</header>
+<nav class="navbar">
+    <!-- 체크박스 -->
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <!-- 햄버거 메뉴 아이콘 -->
+    <label for="menu-toggle" class="menu-toggle-label">&#9776; 메뉴 </label>
+    <!-- 메뉴 항목 -->
+    <ul class="menu-links">
+        <li><a href="/web/YC/">현황판</a></li>
+        <li><a href="/web/YC/connect.html">장비등록</a></li>
+        <li><a id="login" href="/web/YC/login.html">로그아웃</a></li>
+    </ul>
+</nav><main>
+    <div class="submit-container">
+        <div class="logo-section">
+            <div class="logo">
+                <svg viewBox="0 0 24 24">
+                </svg>
+            </div>
+            <h1 class="title">스마트팜 양봉 시스템</h1>
+            <p class="subtitle">양봉 관리의 모든 것을 한눈에</p>
+        </div>
+
+        <form id="userForm">
+            <div class="input-group">
+                <label class="input-label">아이디</label>
+                <input type="text" class="input-field" id="userid" placeholder="아이디를 입력하세요" required>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">비밀번호</label>
+                <input type="password" class="input-field" id="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+
+            <button type="submit" class="submit-button">로그인</button>
+
+            <div class="divider">또는</div>
+
+            <p class="user-link">
+                계정이 없으신가요? <a href="/web/YC/join.html">회원가입</a>
+            </p>
+            <p class="user-link">
+                비밀번호를 잊으셨나요? <a href="#">비밀번호 찾기</a>
+            </p>
+        </form>
+    </div>
+</main><br><br>
+<footer>
+    <p>스마트팜 © 2024</p>
+</footer>
+<script src="./js/login.js"></script>
+</body>
+</html>

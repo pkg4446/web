@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="./manifest.json">
+<title>Smartfarm</title>
+<link href="./css/main.css" rel="stylesheet" type="text/css" />
+<link href="./css/user.css" rel="stylesheet" type="text/css" /></head>
+<body>
+<header>
+    <h4>&nbsp;</h4>
+    <h1>스마트 양봉</h1>
+</header>
+<nav class="navbar">
+    <!-- 체크박스 -->
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <!-- 햄버거 메뉴 아이콘 -->
+    <label for="menu-toggle" class="menu-toggle-label">&#9776; 메뉴 </label>
+    <!-- 메뉴 항목 -->
+    <ul class="menu-links">
+        <li><a href="/web/YC/">현황판</a></li>
+        <li><a href="/web/YC/connect.html">장비등록</a></li>
+        <li><a id="login" href="/web/YC/login.html">로그아웃</a></li>
+    </ul>
+</nav><main>
+    <div class="submit-container">
+        <div class="logo-section">
+            <div class="logo">
+                <svg viewBox="0 0 24 24">
+                </svg>
+            </div>
+            <h1 class="title">스마트팜 회원가입</h1>
+            <p class="subtitle">스마트팜 서비스 이용을 위한 회원가입</p>
+        </div>
+
+        <form id="userForm">
+            <div class="form-section">
+                <h2 class="section-title">기본 정보</h2>
+                <div class="input-group">
+                    <label class="input-label required">아이디</label>
+                    <input type="text" class="input-field" id="userid" placeholder="6-20자의 영문, 숫자 조합" required>
+                    <p class="help-text">영문, 숫자를 조합하여 6-20자로 입력해주세요</p>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label required">비밀번호</label>
+                    <input type="password" class="input-field" id="password" placeholder="비밀번호 입력" required>
+                    <label class="input-label required">비밀번호 확인</label>
+                    <input type="password" class="input-field" id="passcheck" placeholder="비밀번호 재입력" required>
+                    <p class="help-text">8자 이상의 영문, 숫자, 특수문자 조합</p>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">사용자 정보</h2>
+                <div class="input-group">
+                    <label class="input-label required">이름</label>
+                    <input type="text" class="input-field" id="username" placeholder="이름을 입력하세요" required>
+                </div>
+                <div class="input-group">
+                    <label class="input-label required">연락처</label>
+                    <input type="tel" class="input-field" id="userphone" placeholder="'-' 없이 입력하세요" required>
+                </div>
+                <div class="input-group">
+                    <label class="input-label required">농장이름</label>
+                    <input type="text" class="input-field" id="farmname" placeholder="농장 이름을 입력하세요" required>
+                </div>
+                <div class="input-group">
+                    <label class="input-label required">농장주소</label>
+                    <input type="text" class="input-field" id="farmaddr" placeholder="농장 주소를 입력하세요" required>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-button">회원가입</button>
+
+            <p class="user-link">
+                이미 계정이 있으신가요? <a href="#">로그인</a>
+            </p>
+        </form>
+    </div>
+</main><br><br>
+<footer>
+    <p>스마트팜 © 2024</p>
+</footer>
+<script src="./js/join.js"></script>
+</body>
+</html>

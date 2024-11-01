@@ -6,7 +6,7 @@
 <link rel="manifest" href="./manifest.json">
 <title>Smartfarm</title>
 <link href="./css/main.css" rel="stylesheet" type="text/css" />
-<link href="./css/list.css" rel="stylesheet" type="text/css" /></head>
+<link href="./css/user.css" rel="stylesheet" type="text/css" /></head>
 <body>
 <header>
     <h4>&nbsp;</h4>
@@ -22,31 +22,27 @@
         <li><a href="/web/YC/">현황판</a></li>
         <li><a href="/web/YC/connect.html">장비등록</a></li>
         <li><a id="login" href="/web/YC/login.html">로그아웃</a></li>
-        <li><div class="btn" id="view_lock" onclick=lock_shift()>화면 잠김</div></li>
     </ul>
 </nav><main>
-    <div class="container">
-        <div class="header-row">
-            <div class="cell header">농가 정보</div>
-            <div class="cell" id="farm_name">농장</div>
-            <div class="cell" id="user_name">이름</div>
+    <section class="dashboard">
+        <div class="date-controls">
+            <button class="search-btn" onclick="day_change(false)">하루 전</button>
+            <input  class="date-input" type="date" id="data_day" onchange="getdata(new Date(this.value))">
+            <button class="search-btn" onclick="day_change(true)">하루 뒤</button>
+        </div><br>
+        <div class="graph-container">
+            <h1>🌡️온도</h1>
+            <div class="graph" id="hive_graph_temp"></div>
+            <h1>💧습도</h1>
+            <div class="graph" id="hive_graph_humi"></div>
+            <h1>☀️공간 온도</h1>
+            <div class="graph" id="hive_graph_air"></div>
         </div>
-        <div class="address-row">
-            <div class="cell header">농장 주소</div>
-            <div class="cell" id="farm_addr">주소</div>
-        </div>
-        <div id="farm_section_pump">
-        </div>
-        <div id="farm_section_first">
-        </div>
-        <div id="farm_section_second">
-        </div>
-    </div>
+    </section>
 </main><br><br>
 <footer>
     <p>스마트팜 © 2024</p>
 </footer>
-<script src="./js/sweetalert2.js"></script>
-<script src="./js/device_list.js"></script>
-</body>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script src="./js/device_log.js"></script></body>
 </html>
