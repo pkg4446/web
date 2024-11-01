@@ -40,8 +40,7 @@ function getdata(date_now){
     const token     = localStorage.getItem('token');
     const device    = localStorage.getItem('device');
 
-    fetch("http://yc.beetopia.kro.kr"+"/hive/log", {
-        mode: 'no-cors',
+    fetch("//yc.beetopia.kro.kr"+"/hive/log", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

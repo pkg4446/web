@@ -55,8 +55,7 @@ function device_regist(device_type,device_id,device_name) {
         dvid:   device_id,
         name:   device_name
     }
-    fetch("http://yc.beetopia.kro.kr"+"/"+device_type+"/connect", {
-        mode: 'no-cors',
+    fetch("//yc.beetopia.kro.kr"+"/"+device_type+"/connect", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -88,8 +87,7 @@ function fetch_same_ip() {
         id:     localStorage.getItem('user'),
         token:  localStorage.getItem('token'),
     }
-    fetch("http://yc.beetopia.kro.kr"+"/hive/list_able", {
-        mode: 'no-cors',
+    fetch("//yc.beetopia.kro.kr"+"/hive/list_able", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
