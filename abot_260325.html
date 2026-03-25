@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABot</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --accent: #0ea5e9;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f1f5f9;
+            margin: 0;
+            padding: 0;
+            /* 부드러운 스크롤 이동 효과 적용 */
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: -1px; }
+        header p { opacity: 0.9; font-size: 1.1rem; margin-top: 10px; }
+
+        /* 목차(TOC) 스타일 추가 */
+        .toc {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            margin-bottom: 40px;
+        }
+
+        .toc h2 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            border-left: none;
+            padding-left: 0;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .toc li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            display: block;
+            padding: 10px 15px;
+            background-color: var(--light);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .toc li a:hover {
+            background-color: #eff6ff;
+            color: var(--primary);
+            border-left-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        h2 {
+            color: var(--primary);
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            /* 앵커 이동 시 헤더에 가려지지 않도록 여백 확보 */
+            scroll-margin-top: 30px; 
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        h3 { color: var(--dark); margin-top: 0; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+
+        .trend-tag {
+            display: inline-block;
+            background: var(--light);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 40px;            
+        }
+
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th { background-color: var(--primary); color: white; font-weight: 500; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: var(--light); }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .badge-global { background: #dCFCE7; color: #166534; }
+        .badge-korea { background: #DBEAFE; color: #1E40AF; }
+
+        .highlight { color: var(--primary); font-weight: 700; }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+        /* --- 프린트(인쇄) 전용 스타일 --- */
+        @media print {
+            @page {
+                margin: 10mm;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                background-color: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            /* 1. 배경색 및 그림자 등 인쇄 환경에 맞게 최적화 */
+            body {
+                background-color: white;
+                -webkit-print-color-adjust: exact; /* 크롬/사파리 배경색 인쇄 강제 */
+                print-color-adjust: exact;
+            }
+
+            .container {
+                margin: 0;
+                padding: 0;
+                max-width: 100%;
+            }
+/* 
+            2. 카드, 표, 리스트 등이 페이지 중간에 잘리지 않도록 보호 */
+            .card, table, li, tr {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            /* 3. 각 대분류(section)가 가능하면 잘리지 않도록 보호 */
+            section {
+                page-break-inside: avoid;
+                break-inside: avoid;
+                /* 만약 각 챕터(01, 02...)를 무조건 새 페이지에서 시작하고 싶다면 아래 주석을 해제하세요 */
+                /* page-break-before: always; */
+                /* break-before: page; */
+            }
+            header{
+                display: none;
+            }
+            /* 4. 인쇄할 때 굳이 필요 없는 목차 숨기기 (선택 사항) */
+            .toc {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>2026 로봇 그리퍼 산업 리포트 & 로드맵</h1>
+        <p>Global & Domestic Robot Ecosystem Analysis</p>
+    </header>
+
+    <nav class="toc">
+        <h2>📑 목차</h2>
+        <ul>
+            <li><a href="#section-01">01. 2026 산업 핵심 트렌드</a></li>
+            <li><a href="#section-02">02. 글로벌 주요 기업 (Global Leaders)</a></li>
+            <li><a href="#section-03">03. 국내 산업 생태계 (K-Robot)</a></li>
+            <li><a href="#section-04">04. 2026 주목할만한 기술 혁신</a></li>
+            <li><a href="#section-05">05. 국내 주요 기업 상세 프로필</a></li>
+            <li><a href="#section-06">06. 글로벌 리더 상세 분석</a></li>
+            <li><a href="#section-07">07. 통합 로드맵 및 R&D 기획서</a></li>
+        </ul>
+    </nav>
+    <section>
+        <h2 id="section-01">01. 2026 산업 핵심 트렌드</h2>
+        <div class="grid">
+            <div class="card">
+                <span class="trend-tag">Soft Robotics</span>
+                <h3>소프트 로보틱스</h3>
+                <p>유연 소재를 활용하여 비정형 사물(농산물, 식품 등)을 손상 없이 파지하는 기술이 주류로 부상.</p>
+            </div>
+            <div class="card">
+                <span class="trend-tag">Physical AI</span>
+                <h3>피지컬 AI & 센서 통합</h3>
+                <p>시각(Vision)과 촉각(Tactile) 센서를 융합하여 로봇이 스스로 파지력을 조절하는 지능형 제어 확산.</p>
+            </div>
+            <div class="card">
+                <span class="trend-tag">Electric Shift</span>
+                <h3>전동식 세대 교체</h3>
+                <p>공압식에서 배터리 기반 전동식으로 전환. 0.1mm 단위의 정밀 제어 및 IoT 연동성 강화.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <a href="#section-06">
+            <h2 id="section-02">02. 글로벌 주요 기업 (Global Leaders)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>기업명</th>
+                        <th>국가</th>
+                        <th>핵심 기술 및 강점</th>
+                        <th>주력 모델</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="highlight">Schunk</span></td>
+                        <td>독일</td>
+                        <td>전 세계 1위, ADHESO(접착식) 및 초정밀 제조</td>
+                        <td>PGN-plus-P, EGL</td>
+                    </tr>
+                    <tr>
+                        <td><span class="highlight">Robotiq</span></td>
+                        <td>캐나다</td>
+                        <td>협동로봇 최적화, 플러그 앤 플레이, 피지컬 AI</td>
+                        <td>Hand-E, 2F 시리즈</td>
+                    </tr>
+                    <tr>
+                        <td><span class="highlight">OnRobot</span></td>
+                        <td>덴마크</td>
+                        <td>브랜드 중립성, D:PLOY 플랫폼, 노코드 자동화</td>
+                        <td>RG2, VG10(전동진공)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="highlight">Soft Robotics</span></td>
+                        <td>미국</td>
+                        <td>비정형/식품 자동화 독보적 1위, mGripAI</td>
+                        <td>mGrip, Oxipital AI</td>
+                    </tr>
+                </tbody>
+            </table>
+        </a>
+    </section>
+
+    <section>
+        <a href="#section-05">
+            <h2 id="section-03">03. 국내 산업 생태계 (K-Robot)</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>협동로봇 제조사</h3>
+                    <ul>
+                        <li><strong>두산로보틱스:</strong> 국내 1위, 최다 라인업 (M, A, H, E 시리즈)</li>
+                        <li><strong>레인보우로보틱스:</strong> 핵심 부품 내재화로 압도적 가성비</li>
+                        <li><strong>뉴로메카:</strong> 중소기업 특화, AI 직접 교시 강점</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>그리퍼 및 센서 전문</h3>
+                    <ul>
+                        <li><strong>테솔로:</strong> 20자유도 휴머노이드 5지 로봇 손</li>
+                        <li><strong>에이딘로보틱스:</strong> 프린지 이펙트 기반 6축 힘/토크 센서</li>
+                        <li><strong>유엔디:</strong> 세계 최초 무선 마그네틱 툴 체인저</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>구동부 및 핵심 부품</h3>
+                    <ul>
+                        <li><strong>삼현:</strong> 모터+감속기+제어기 3-in-1 통합 솔루션</li>
+                        <li><strong>본시스템즈:</strong> 독자적 사이클로이드 감속기(BSR) 기술</li>
+                        <li><strong>로보티즈:</strong> 다이나믹셀 액추에이터 및 자율주행 개미</li>
+                    </ul>
+                </div>
+            </div>
+        </a>
+    </section>
+
+    <section>
+        <h2 id="section-04">04. 2026 주목할만한 기술 혁신</h2>
+        <div class="card">
+            <p><a href="https://www.t-robotics.net/" target="_blank" rel="noopener noreferrer"><strong>티로보틱스 (T-Robotics):</strong> 북미 물류 AMR 시장 선점 및 산업용 휴머노이드 'TR-WORKS' 공개.</a></p>
+            <p><a href="https://allegrohand.com/" target="_blank" rel="noopener noreferrer"><strong>원익로보틱스 (Wonik):</strong> 메타(Meta)와 협력한 알레그로 핸드, AI 강화학습 기반 덱스터리티 구현.</a></p>
+            <p><a href="https://www.gripalm.com/product/" target="_blank" rel="noopener noreferrer"><strong>그립팜 (하비스탕스):</strong> 3D 프린팅 기반 탄소복합소재 맞춤형 그리퍼로 경량화 극대화.</a></p>
+        </div>
+    </section>
+
+    <section>
+        <h2 id="section-05">05. 국내 주요 기업 상세 프로필 (Deep Dive)</h2>
+        
+        <h3 style="margin-top: 30px; color: var(--primary);">■ 협동로봇(Cobot) 제조사 상세 라인업</h3>
+        <div class="grid">
+            <div class="card">
+                <a href="https://www.doosanrobotics.com/kr/product-solutions/product" target="_blank" rel="noopener noreferrer">
+                    <h4>두산로보틱스 (Doosan Robotics)</h4>
+                    <p><strong>주요 라인업:</strong> M(프리미엄), A(가성비), H(고하중), E(식음료 특화) 시리즈</p>
+                    <p><strong>핵심 기술:</strong> 6개 토크 센서 기반의 고도화된 안전성 및 업계 최다 라인업 보유</p>
+                </a>
+            </div>
+            <div class="card">
+                <a href="https://www.rainbow-robotics.com/rb target="_blank" rel="noopener noreferrer">
+                    <h4>레인보우로보틱스 (Rainbow Robotics)</h4>
+                    <p><strong>주요 라인업:</strong> RB 시리즈 (가반하중 3kg~16kg 모델)</p>
+                    <p><strong>핵심 기술:</strong> 구동기, 엔코더 등 핵심 부품 100% 자체 개발을 통한 압도적인 가격 경쟁력</p>
+                </a>
+            </div>
+            <div class="card">
+                <a href="https://www.neuromeka.com/amr" target="_blank" rel="noopener noreferrer">
+                    <h4>뉴로메카 (Neuromeka)</h4>
+                    <p><strong>주요 라인업:</strong> Indy(인디) 시리즈</p>
+                    <p><strong>핵심 기술:</strong> 충돌 감지 알고리즘 및 비전문가도 쉽게 다루는 직접 교시(Direct Teaching) 기능</p>
+                </a>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 30px; color: var(--primary);">■ 로봇 그리퍼 및 부품 기업 상세 기술</h3>
+        <div class="grid">
+            <div class="card">
+                <a href="https://jrtfa.com/kor/product/products.html" target="_blank" rel="noopener noreferrer">
+                    <h4>주강로보테크 (JRT)</h4>
+                    <p><strong>핵심 성과:</strong> 국내 최초 방수·방진(IP55) 전동 그리퍼 상용화</p>
+                    <p><strong>특장점:</strong> 전원 차단 시 물체 낙하를 방지하는 '셀프 락' 기능 및 맞춤형 특주품 제작 능력</p>
+                </a>
+            </div>
+            <div class="card">
+                <a href="https://tesollo.com/products/" target="_blank" rel="noopener noreferrer">
+                    <h4>테솔로 (TESOLLO)</h4>
+                    <p><strong>대표 제품:</strong> 델토(Delto) 3지 그리퍼(12자유도), 5지 휴머노이드 핸드(20자유도)</p>
+                    <p><strong>기술력:</strong> 비정형 물체를 사람 손처럼 안정적으로 쥐는 다관절 기구 설계 및 제어</p>
+                </a>
+            </div>
+            <div class="card">
+                <a href="https://www.aidinrobotics.co.kr/" target="_blank" rel="noopener noreferrer">
+                    <h4>에이딘로보틱스 (AIDIN)</h4>
+                    <p><strong>핵심 기술:</strong> 프린지 이펙트(Fringe Effect) 기반 초정밀 6축 힘/토크 센서</p>
+                    <p><strong>솔루션:</strong> 인간의 촉각을 모사하여 샌딩, 폴리싱 공정을 자동화하는 'AIRO-One'</p>
+                </a>
+            </div>
+           
+            <div class="card">
+                <a href="https://www.robotis.com/" target="_blank" rel="noopener noreferrer"></a>
+                    <h4>로보티즈 (ROBOTIS)</h4>
+                    <p><strong>부품:</strong> 전 세계 레퍼런스인 '다이나믹셀' 및 휴머노이드 특화 'DXL-Q' 시리즈</p>
+                    <p><strong>완제품:</strong> 로봇팔이 직접 엘리베이터 버튼을 누르는 자율주행 배송 로봇 '개미'</p>
+                </a>
+            </div>
+            
+            <div class="card">
+                <a href="https://www.magbot.kr/" target="_blank" rel="noopener noreferrer">
+                    <h4>유엔디 (UND)</h4>
+                    <p><strong>혁신 기술:</strong> 세계 최초 완전 무선 방식의 마그네틱 툴 체인저 '맥봇'</p>
+                    <p><strong>장점:</strong> 0.2초 내 툴 교체, 초절전 스위칭 마그네틱 기술로 정전 시에도 파지 상태 유지</p>
+                </a>
+            </div>
+            
+            <div class="card">
+                <a href="https://wonikrobotics.com/" target="_blank" rel="noopener noreferrer"></a>
+                    <h4>원익로보틱스 (Wonik)</h4>
+                    <p><strong>주력 제품:</strong> 알레그로 핸드(16~21자유도), 자율이동 조작로봇(AMMR)</p>
+                    <p><strong>AI 기술:</strong> 메타(Meta) 협력 및 강화학습을 통한 고도의 덱스터리티(정밀 조작) 구현</p>
+                </a>
+            </div>
+            
+        </div>
+    </section>
+
+    <section>
+        <h2 id="section-06">06. 글로벌 리더 상세 분석 (Global Leaders Detail)</h2>
+        <a href="https://schunk.com/kr/ko" target="_blank" rel="noopener noreferrer">
+        <div class="card" style="margin-bottom: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3>1. Schunk (독일)</h3>
+                <span class="badge badge-global">Global No.1</span>
+            </div>
+            <p><strong>핵심 기술:</strong> 게코 도마뱀 원리를 이용한 <strong>ADHESO(바이오닉 그리핑)</strong> 기술로 전원 없이 초정밀 파지 구현, 0.01mm 이하의 반복 정밀도 보장.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>제품군</th>
+                        <th>주요 모델</th>
+                        <th>특징</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>범용 그리퍼</td>
+                        <td>PGN-plus-P</td>
+                        <td>멀티 투스 가이딩 기술로 높은 하중과 정밀도 실현</td>
+                    </tr>
+                    <tr>
+                        <td>지능형 툴홀더</td>
+                        <td>iTENDO</td>
+                        <td>가공 중 진동 감지 및 공정 최적화 데이터 제공</td>
+                    </tr>
+                </tbody>
+            </table>
+        </a></div>
+        <div class="card" style="margin-bottom: 30px;">
+            
+        <a href="https://robotiq.com/" target="_blank" rel="noopener noreferrer">
+            <h3>2. Robotiq (캐나다)</h3>
+            <p><strong>핵심 기술:</strong> 프로그래밍 없이 물체 모양에 맞춰 굽혀지는 <strong>적응형 그리핑(Adaptive Gripping)</strong> 및 하드웨어와 지능형 알고리즘을 결합한 <strong>피지컬 AI</strong>.</p>
+            <p><strong>주요 제품:</strong> Hand-E(IP67 등급 정밀 조립용), 2F-85/140(범용 전동 그리퍼), FT 300-S(6축 힘-토크 센서).</p>
+        </a></div>
+        <div class="card" style="margin-bottom: 30px;">
+            
+        <a href="https://onrobot.com/ko" target="_blank" rel="noopener noreferrer">
+            <h3>3. OnRobot (덴마크)</h3>
+            <p><strong>핵심 기술:</strong> 모든 로봇 브랜드와 즉시 연결되는 <strong>원 시스템 솔루션</strong> 및 자동화 배치 시간을 90% 단축하는 <strong>D:PLOY 플랫폼</strong>.</p>
+            <p><strong>주요 제품:</strong> RG2/RG6(핑거 그리퍼), VG10(외부 에어 없는 전동 진공 그리퍼), Gecko Single Pad(점착식 그리퍼).</p>
+        </a></div>
+       
+        <div class="card" style="margin-bottom: 30px;">
+             <a href="https://www.zimmer-group.com/ko/" target="_blank" rel="noopener noreferrer"></a>
+            <h3>4. Zimmer Group (독일)</h3>
+            <p><strong>핵심 기술:</strong> 3,000만 번의 사이클을 보장하는 <strong>고내구성 핸들링 기술</strong> 및 범용 엔드 이펙터 플랫폼인 <strong>MATCH 에코시스템</strong>.</p>
+            <p><strong>주요 제품:</strong> GPP5000 시리즈(플래그십 범용 그리퍼), GEH6000(전동 서보 그리퍼), MATCH Gripper.</p>
+            </a>
+        </div>
+        
+        <div class="card" style="margin-bottom: 30px;">
+            
+        <a href="https://www.festo.com/kr/ko/" target="_blank" rel="noopener noreferrer">
+            <h3>5. Festo (독일)</h3>
+            <p><strong>핵심 기술:</strong> 소프트웨어 앱으로 기능을 변경하는 <strong>디지털 공압(VTEM)</strong> 및 산업용 AI 솔루션인 <strong>Festo AX</strong>.</p>
+            <p><strong>주요 제품:</strong> Motion Terminal VTEM, DHAS(핀 레이 구조 적응형 그리퍼), CMMT 서보 드라이브.</p>
+        </a></div>
+        <div class="card" style="margin-bottom: 30px;">
+            
+        <ㅁ href="https://www.smckorea.co.kr/homepage/ver3.5/product/industry/industry_robot.asp" target="_blank" rel="noopener noreferrer">
+            <h3>6. SMC (일본)</h3>
+            <p><strong>핵심 기술:</strong> 세계 시장 점유율 39%의 공압 기술력, 무선 통신 기술 기반의 <strong>에너지 관리 시스템(AMS)</strong>.</p>
+            <p><strong>주요 제품:</strong> SY 시리즈(솔레노이드 밸브), LE 시리즈(전동 액추에이터), 고순도 칠러/서모콘.</p>
+        </a></div>
+        <div class="card" style="margin-bottom: 30px;">
+            
+        <a href="https://softroboticsinc.com/" target="_blank" rel="noopener noreferrer">
+            <h3>7. Soft Robotics (미국)</h3>
+            <p><strong>핵심 기술:</strong> 폴리머 소재의 <strong>적응형 파지</strong> 기술과 비정형 물체 인식을 위한 <strong>mGripAI</strong> 통합 솔루션.</p>
+            <p><strong>주요 제품:</strong> mGrip(신선식품용 소프트 그리퍼), Oxipital AI(결함 감지 및 비전 인스펙션 소프트웨어).</p>
+        </a></div>
+    </section>
+
+    <section>
+        <h2 id="section-07">07. 로봇 그리퍼 개발 통합 로드맵 및 R&D 기획서</h2>
+
+        <h3 style="margin-top: 30px; color: var(--primary);">1. 단계별 제품 기획 및 로드맵</h3>
+        <div class="grid">
+            <div class="card" style="border-top: 4px solid #10b981;">
+                <span class="trend-tag" style="background: #d1fae5; color: #047857;">Phase 1</span>
+                <h4 style="margin-top: 0;">산업용 전동 그리퍼</h4>
+                <p><strong>타겟:</strong> 대형 주방 및 싱크대 (조리/식기세척 무인화)</p>
+                <ul>
+                    <li>고온/방수 환경 대응 바이스(Vise) 메커니즘</li>
+                    <li>스텝 모터 + <strong>TMC2209/TMC2225</strong> 적용 (발열 최소화)</li>
+                    <li><strong>SimpleFOC Mini</strong> 보드 프로토타이핑</li>
+                </ul>
+            </div>
+            
+            <div class="card" style="border-top: 4px solid #f59e0b;">
+                <span class="trend-tag" style="background: #fef3c7; color: #b45309;">Phase 2</span>
+                <h4 style="margin-top: 0;">협동 로봇 맞춤형 그리퍼</h4>
+                <p><strong>타겟:</strong> 서비스 직군(F&B), 바리스타 로봇 등</p>
+                <ul>
+                    <li>초소형 디자인 및 역구동성 확보</li>
+                    <li>다이렉트 드라이브(DD) 블러시리스 모터 적용</li>
+                    <li><strong>션트 저항 기반 컴플라이언스 제어</strong> 탑재</li>
+                </ul>
+            </div>
+
+            <div class="card" style="border-top: 4px solid #3b82f6;">
+                <span class="trend-tag" style="background: #dbeafe; color: #1d4ed8;">Phase 3</span>
+                <h4 style="margin-top: 0;">농업용 소프트 그리퍼</h4>
+                <p><strong>타겟:</strong> 스마트팜 작물 수확 및 무른 식재료 패키징</p>
+                <ul>
+                    <li>자연스럽게 밀착되는 언더액추에이티드 구조</li>
+                    <li>끝단 <strong>와전류 텍타일 센서</strong> 내장</li>
+                    <li>모터단 컴플라이언스 융합 하이브리드 제어</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 40px; color: var(--primary);">2. 핵심 기구 설계 및 R&D 과제</h3>
+        <div class="grid">
+            <div class="card">
+                <h4>🔄 오토 툴 체인저 (ATC) 설계</h4>
+                <ul>
+                    <li><strong>완전 무선 & 전동화:</strong> 복잡한 외부 노출 케이블과 공압 호스를 완전히 제거하여 좁은 공간에서도 걸림 없는 툴 교체 설계.</li>
+                    <li><strong>초절전 마그네틱 락킹:</strong> 결합 및 분리 시(약 0.2초)에만 전력을 소모하고, 결합 이후에는 전력 공급 없이 영구자석처럼 파지력을 유지하여 단선/정전 시 추락을 방지하는 안전 메커니즘 도입.</li>
+                    <li><strong>원 시스템 퀵 체인지:</strong> 하나의 로봇 팔이 주방용 바이스(Phase 1), 서비스용(Phase 2), 농업용(Phase 3) 그리퍼를 공정 상황에 맞춰 스스로 교체할 수 있도록 기계적/전기적 인터페이스 규격화.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h4>🔥 발열 제어 (Heat Dissipation)</h4>
+                <ul>
+                    <li><strong>기구적 셀프 락킹:</strong> 웜 기어/리드 스크류 채택으로 대기 발열 차단</li>
+                    <li><strong>스마트 전류 제어:</strong> TMC 드라이버의 대기 상태 전류 감소(Standstill Current Reduction) 세팅</li>
+                    <li><strong>하우징 방열판:</strong> 알루미늄 프레임 + 써멀 패드 일체형 방열</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h4>💧 방수 및 방진 설계 (IP69K 목표)</h4>
+                <ul>
+                    <li><strong>풀 포팅(Full Potting):</strong> 내부 회로 에폭시 마감으로 결로/쇼트 방지</li>
+                    <li><strong>다중 실링:</strong> 회전축 이중 O-링, 직선부 식품 등급 주름관(Bellows)</li>
+                    <li><strong>마그네틱 커플링:</strong> 자력 동력 전달을 통한 완벽한 밀폐(Hermetic Seal)</li>
+                </ul>
+            </div>            
+        </div>
+
+        <h3 style="margin-top: 40px; color: var(--primary);">3. 주요 벤치마킹 및 R&D 적용 방안</h3>
+        
+        <div class="card" style="margin-bottom: 25px;">
+            <h4>🍳 주방/산업용 (위생 및 적응력 강화)</h4>
+            <p><strong>벤치마킹: Schunk EGL/EGP</strong></p>
+            <ul>
+                <li>고압 세척을 견디는 스테인리스 스틸(SUS) 마감 적용</li>
+                <li>오염 시 원터치 교체 가능한 식품 등급(Food-grade) 실리콘 패드 모듈화 설계</li>
+                <li>미끄러운 식기 파지를 위해 안쪽에 흡반(Suction cup) 형태의 음각 패턴 성형 (모터 요구 토크 저감)</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h4>🚜 농업/서비스용 (비정형 객체 파지 및 초경량 설계)</h4>
+            <p><strong>벤치마킹: OnRobot 소프트 그리퍼 & SpiRobs (나선형 로봇)</strong></p>
+            
+            <div style="background-color: var(--light); padding: 20px; border-radius: 10px; margin-top: 15px; border-left: 4px solid var(--accent);">
+                <h5 style="margin-top: 0; color: var(--dark); font-size: 1.1rem;">💡 집중 분석: SpiRobs (나선형 소프트 그리퍼) 메커니즘</h5>
+                
+                <p style="margin-bottom: 10px;"><strong>1. 핵심 설계: 로그 나선 (Logarithmic Spiral)</strong></p>
+                <ul style="margin-top: 0;">
+                    <li>문어 촉수 등 생체 모방 디자인. 수학적 공식 <span style="font-family: 'Times New Roman', Times, serif; font-weight: bold; font-size: 1.1rem; color: var(--primary);">&rho; = ae<sup>b&theta;</sup></span> 를 기구학적 구조로 구현.</li>
+                    <li><strong>단일 그리퍼 범용성:</strong> 이 독특한 구조 덕분에 복잡한 센서 없이도 **지름 5mm의 작은 물체부터 100mm 이상의 큰 물체**까지 한 종류의 그리퍼로 완벽하게 감싸 쥘 수 있음.</li>
+                </ul>
+
+                <p style="margin-bottom: 10px; margin-top: 15px;"><strong>2. 농업용(수확용) 최적화 강점</strong></p>
+                <ul style="margin-top: 0;">
+                    <li><strong>부드러운 파지 (Gentle Grasp):</strong> 나선형 몸체가 물체 표면을 넓게 감싸며 힘을 분산시켜 딸기, 달걀 등 무른 농산물을 상처 없이 수확 가능.</li>
+                    <li><strong>압도적인 효율 (Weight-to-Payload):</strong> 자체 무게의 **최대 260배**까지 들어 올리는 강력한 파지력. 저비용 3D 프린팅 제작 및 단순한 케이블 제어(2~3개)로 유지보수 용이.</li>
+                </ul>
+            </div>
+
+            <p style="margin-top: 20px; margin-bottom: 10px;"><strong>[R&D 적용 방안]</strong></p>
+            <ul>
+                <li><strong>언더액추에이티드 구조:</strong> 단일 구동으로 로그 나선 핑거의 관절이 물체 굴곡을 따라 자연스럽게 밀착되도록 설계.</li>
+                <li><strong>초소형 DD 하이브리드 제어:</strong> 2208 규격 DD 모터 활용(기어박스 생략). 끝단 와전류 텍타일 센서 접촉 시, 모터단 컴플라이언스 제어(션트 저항 전류 감지)를 활성화하여 파지력을 순간적으로 낮춤.</li>
+            </ul>
+        </div>
+    </section>
+</div>
+
+</body>
+</html>
